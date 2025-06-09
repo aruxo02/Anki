@@ -1,12 +1,12 @@
 # Anki App
 
-Este proyecto es un ejemplo sencillo de una aplicación estilo Anki para web y móvil (vía Capacitor).
+This project is a simple example of an Anki-style application for the web and mobile (via Capacitor).
 
 ## Backend
 
-En la carpeta `server` se encuentra una API escrita con Express y MongoDB. Proporciona registro y login de usuarios mediante JWT, creación de mazos y tarjetas, importación/exportación en CSV y un listado de mazos públicos.
+The `server` folder contains an API written with Express and MongoDB. It provides user registration and login through JWT, deck and card creation, CSV import/export, and a list of public decks.
 
-Para iniciar el servidor:
+To start the server:
 
 ```bash
 cd server
@@ -14,10 +14,10 @@ npm install
 node index.js
 ```
 
-El servidor se ejecutará en `http://localhost:3001`.
+The server runs on `http://localhost:3001`.
 
 ## Frontend
 
-La carpeta `client` contiene una interfaz muy básica en HTML y React (vía CDN). Para probarla, basta con abrir `client/index.html` en un navegador que tenga acceso al servidor backend.
+The `client` folder offers a very basic interface in HTML and React (via CDN). To try it out, simply open `client/index.html` in a browser that can reach the backend server.
 
-Esta interfaz permite autenticarse, crear mazos y listarlos. Es un punto de partida para integrar con Capacitor y añadir más funcionalidades.
+This interface lets you authenticate, create decks, and list them. It serves as a starting point for integrating with Capacitor and adding more features.
