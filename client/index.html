@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anki App</title>
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+const api = axios.create({ baseURL: 'http://localhost:3001/api' });
+
+function Login(props) {
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const login = async () => {
+    const res = await api.post('/login', { username, password });
+    props.setToken(res.data.token);
+  };
+  const register = async () => {
+    await api.post('/register', { username, password });
+    await login();
+  };
+  return React.createElement('div', null,
+    React.createElement('h2', null, 'Login'),
+    React.createElement('input', { placeholder: 'Usuario', value: username, onChange: e => setUsername(e.target.value) }),
+    React.createElement('input', { placeholder: 'Contraseña', type: 'password', value: password, onChange: e => setPassword(e.target.value) }),
+    React.createElement('button', { onClick: login }, 'Entrar'),
+    React.createElement('button', { onClick: register }, 'Registrarse')
+  );
+}
+
+function Decks(props) {
+  const [decks, setDecks] = React.useState([]);
+  const [name, setName] = React.useState('');
+  const headers = { Authorization: `Bearer ${props.token}` };
+  const load = async () => {
+    const res = await api.get('/decks', { headers });
+    setDecks(res.data);
+  };
+  const create = async () => {
+    await api.post('/decks', { name }, { headers });
+    setName('');
+    await load();
+  };
+  React.useEffect(() => { load(); }, []);
+  return React.createElement('div', null,
+    React.createElement('h2', null, 'Mazos'),
+    React.createElement('input', { value: name, placeholder: 'Nuevo mazo', onChange: e => setName(e.target.value) }),
+    React.createElement('button', { onClick: create }, 'Crear'),
+    React.createElement('ul', null,
+      decks.map(deck => React.createElement('li', { key: deck._id }, deck.name))
+    )
+  );
+}
+
+function App() {
+  const [token, setToken] = React.useState(null);
+  return token ? React.createElement(Decks, { token }) : React.createElement(Login, { setToken });
+}
+
+ReactDOM.render(React.createElement(App), document.getElementById('root'));
+  </script>
+</body>
+</html>
